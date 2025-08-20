@@ -1,15 +1,18 @@
-package Service;
+package com.example.ecommerce.Service;
+import org.springframework.stereotype.Service;
 
-import org.apache.catalina.User;
+import com.example.ecommerce.repository.UserRepository;
+import com.example.ecommerce.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+@Service
 public class AuthService {
 
     @Autowired
-    private Repository.userRepository.UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -27,7 +30,7 @@ public class AuthService {
     }
 
     // Optional: Authenticate manually (not needed if using Spring Security login)
-    public Optional<Object> login(String email, String rawPassword) {
+    public Optional<User> login(String email, String rawPassword) {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -38,5 +41,3 @@ public class AuthService {
         return Optional.empty();
     }
 }
-
-

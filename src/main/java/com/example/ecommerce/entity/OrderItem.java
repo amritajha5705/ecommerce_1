@@ -1,11 +1,11 @@
-package entity;
+package com.example.ecommerce.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-@Entity
 
+@Entity
 public class OrderItem {
 
 
@@ -13,26 +13,19 @@ public class OrderItem {
 
     @GeneratedValue
 
-    private Long
-            id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne private Order order;
 
-    private Order
-            order;
-
-    @ManyToOne
-
-    private Product product;
+    @ManyToOne private Product product;
 
     private int quantity;
 
-    private String name;
+    private  String name;
 
     private double price;
 
-    private String
-            imageName;
+    private String imageName;
 
     public Long getId() {
         return id;
@@ -88,5 +81,18 @@ public class OrderItem {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "id=" + id +
+                ", order=" + order +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", imageName='" + imageName + '\'' +
+                '}';
     }
 }

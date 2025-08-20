@@ -1,9 +1,10 @@
-package entity;
+package com.example.ecommerce.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-@entity
+@Entity
 public class User {
 
     public Long getId() {
