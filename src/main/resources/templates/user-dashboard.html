@@ -1,49 +1,178 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"&gt;>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>User Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"&gt;>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global */
+        body {
+          margin: 0;
+          font-family: 'Poppins', sans-serif;
+          background: #f0f2f5;
+          color: #333;
+        }
+        .container {
+          max-width: 1200px;
+          margin: 40px auto;
+          padding: 20px;
+        }
+
+        /* Header */
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 35px;
+        }
+        .header h2 {
+          margin: 0;
+          font-size: 30px;
+          font-weight: 600;
+          color: #222;
+        }
+        .btn-cart {
+          text-decoration: none;
+          padding: 10px 24px;
+          background: linear-gradient(45deg, #ffcd38, #ffc107);
+          color: #000;
+          font-weight: 600;
+          border-radius: 30px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+          transition: all 0.3s ease;
+        }
+        .btn-cart:hover {
+          background: linear-gradient(45deg, #f7b500, #ff9800);
+          transform: translateY(-2px);
+        }
+
+        /* Product Grid */
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 25px;
+        }
+        .card {
+          background: #fff;
+          border-radius: 14px;
+          overflow: hidden;
+          box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+        }
+        .card img {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+        }
+        .card-body {
+          padding: 18px;
+        }
+        .card-body h5 {
+          margin: 0 0 8px;
+          font-size: 18px;
+          font-weight: 600;
+          color: #111;
+        }
+        .card-body p {
+          margin: 0 0 12px;
+          font-size: 14px;
+          color: #666;
+          line-height: 1.4;
+          min-height: 40px;
+        }
+        .price {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1a73e8;
+          margin-bottom: 12px;
+        }
+
+        /* Stock */
+        .stock {
+          display: inline-block;
+          font-size: 13px;
+          font-weight: 500;
+          padding: 5px 12px;
+          border-radius: 20px;
+          margin-bottom: 15px;
+        }
+        .stock.available {
+          background: #e8f7ed;
+          color: #28a745;
+        }
+        .stock.unavailable {
+          background: #fdecea;
+          color: #dc3545;
+        }
+
+        /* Buttons */
+        .btn-add {
+          display: inline-block;
+          text-decoration: none;
+          padding: 10px 20px;
+          background: linear-gradient(45deg, #1a73e8, #0d6efd);
+          color: white;
+          border-radius: 30px;
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+        }
+        .btn-add:hover {
+          background: linear-gradient(45deg, #1558b0, #084298);
+          transform: translateY(-2px);
+        }
+        .btn-disabled {
+          padding: 10px 20px;
+          background: #e0e0e0;
+          color: #777;
+          border: none;
+          border-radius: 30px;
+          font-size: 14px;
+          cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2>User Dashboard</h2>
-    <a href="/user/cart" class="btn btn-warning float-end mb-3">🛒 View Cart</a><br/>
-    <div class="row">
-        <div class="col-md-4 mb-4" th:each="product : ${products}">
-            <div class="card">
-                <img th:src="@{'/images/' + ${product.imageName}}" class="card-img-top" width="100" height="80" >
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h2>👤 User Dashboard</h2>
+        <a href="/user/cart" class="btn-cart">🛒 View Cart</a>
+    </div>
 
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}"></h5>
-                    <p class="card-text" th:text="${product.description}"></p>
-                    <p><strong>₹</strong> <span th:text="${product.price}"></span></p>
-                    <!--<a th:href="@{'/user/add-to-cart/' + ${product.id}}" class="btn btn-success w-100">Add to Cart</a> -->
+    <!-- Products Grid -->
+    <div class="grid">
+        <div class="card" th:each="product : ${products}">
+            <img th:src="@{'/images/' + ${product.imageName}}" alt="Product">
 
+            <div class="card-body">
+                <h5 th:text="${product.name}"></h5>
+                <p th:text="${product.description}"></p>
+                <p class="price">₹ <span th:text="${product.price}"></span></p>
 
+                <!-- Stock & Buttons -->
+                <th:block th:with="reservedMap=${session.reservedStock},
+                           reservedQty=${reservedMap != null and reservedMap[product.id] != null ? reservedMap[product.id] : 0},
+                           availableStock=${product.stock - reservedQty}">
 
-                    <!-- Load reserved quantity from session map -->
-                    <th:block th:with="reservedMap=${session.reservedStock},
-reservedQty=${reservedMap != null and reservedMap[product.id] != null ? reservedMap[product.id] : 0},
-availableStock=${product.stock - reservedQty}">
+          <span th:class="'stock ' + (${availableStock > 0} ? 'available' : 'unavailable')"
+                th:text="'Available: ' + ${availableStock}"></span>
 
-                        <p class="card-text text-muted">
-                            Available: <span th:text="${availableStock}"></span>
-                        </p>
-
-                        <!--If available stock > 0 -->
+                    <div>
                         <a th:if="${availableStock > 0}"
                            th:href="@{'/user/add-to-cart/' + ${product.id}}"
-                           class="btn btn-primary btn-sm">
-                            Add to Cart
-                        </a>
+                           class="btn-add">➕ Add to Cart</a>
 
-                        <!-- If out of stock -->
-                        <button th:if="${availableStock <= 0}" class="btn btn-secondary btn-sm" disabled>
-                            Out of Stock
-                        </button>
-                    </th:block>
-                </div>
+                        <button th:if="${availableStock <= 0}" class="btn-disabled">❌ Out of Stock</button>
+                    </div>
+                </th:block>
             </div>
         </div>
     </div>

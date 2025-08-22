@@ -3,23 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Login | E-commerce</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <h2 class="text-center">Login</h2>
-    <form method="post" action="/login" class="col-md-6 offset-md-3">
-        <div class="form-group mb-3">
-            <label>Email</label>
-            <input type="text" name="username" class="form-control" required>
+<body style="margin:0; padding:0; height:100vh; display:flex; justify-content:center; align-items:center; font-family:'Segoe UI',sans-serif;
+             background:url('YOUR_IMAGE.png') no-repeat center center/cover;">
+
+<!-- Container -->
+<div style="background:rgba(255,255,255,0.92); padding:40px; border-radius:16px; box-shadow:0 8px 25px rgba(0,0,0,0.25); width:100%; max-width:380px; text-align:center;">
+
+    <!-- Title with cart icon -->
+    <h2 style="margin-bottom:25px; font-size:30px; letter-spacing:1px; color:#222;">
+        🛒 Login
+    </h2>
+
+    <!-- Form -->
+    <form method="post" action="/login">
+        <div style="margin-bottom:20px; text-align:left;">
+            <label for="email" style="display:block; margin-bottom:6px; font-weight:600; color:#333;">Email</label>
+            <input id="email" type="email" name="username" required
+                   style="width:100%; padding:12px; border:1px solid #ccc; border-radius:10px; outline:none; font-size:15px; background:#fff; color:#222;">
         </div>
-        <div class="form-group mb-3">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control" required>
+
+        <div style="margin-bottom:20px; text-align:left; position:relative;">
+            <label for="password" style="display:block; margin-bottom:6px; font-weight:600; color:#333;">Password</label>
+            <input id="password" type="password" name="password" required
+                   style="width:100%; padding:12px; border:1px solid #ccc; border-radius:10px; outline:none; font-size:15px; background:#fff; color:#222;">
+            <span onclick="togglePassword()" style="position:absolute; right:15px; top:38px; cursor:pointer; font-size:18px; color:#666;">👁</span>
         </div>
-        <button class="btn btn-primary w-100">Login</button>
+
+        <button type="submit"
+                style="width:100%; padding:14px; margin-top:10px; border:none; border-radius:10px; background:linear-gradient(135deg,#ff9966,#ff5e62); color:white; font-size:17px; font-weight:600; cursor:pointer; box-shadow:0 6px 20px rgba(255,94,98,0.4); transition:all 0.3s;"
+                onmouseover="this.style.transform='scale(1.05)';"
+                onmouseout="this.style.transform='scale(1)';">
+            Login
+        </button>
     </form>
-    <p class="text-center mt-3">Don't have an account? <a href="/register">Register</a></p>
+
+    <p style="margin-top:20px; font-size:14px; color:#333;">Don’t have an account?
+        <a href="/register" style="color:#ff5e62; font-weight:bold; text-decoration:none;"
+           onmouseover="this.style.textDecoration='underline';"
+           onmouseout="this.style.textDecoration='none';">Register</a>
+    </p>
 </div>
+
+<script>
+    function togglePassword() {
+      const pass=document.getElementById("password");
+      pass.type= pass.type==="password" ? "text" : "password";
+    }
+</script>
 </body>
 </html>
