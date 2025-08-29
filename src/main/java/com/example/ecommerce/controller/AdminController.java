@@ -45,7 +45,7 @@ public class AdminController {
     ) {
         try {
 // File system path (outside classpath)
-            String uploadDir = "D:\\SPRINGBOOT\\ecommerce\\src\\main\\resources\\static\\images";
+            String uploadDir = "/Users/kundanjha/Downloads/ecommerce/target/classes/static/images";
             File uploadFolder = new File(uploadDir);
             if (!uploadFolder.exists()) {
                 uploadFolder.mkdirs(); // create folder if it doesn't exist
